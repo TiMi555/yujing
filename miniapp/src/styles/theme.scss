@@ -1,0 +1,35 @@
+:root {
+  --bg-page: #f7f8fa;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-muted: #999999;
+  --accent: #4f46e5;
+  --accent-light: #eef2ff;
+  --border: #e8e8e8;
+  --blur-overlay: rgba(255, 255, 255, 0.6);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 48rpx;
+  padding: 24rpx 48rpx;
+  font-size: 30rpx;
+  border: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 2rpx solid var(--accent);
+  border-radius: 48rpx;
+  padding: 22rpx 48rpx;
+  font-size: 30rpx;
+}

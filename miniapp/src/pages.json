@@ -1,0 +1,35 @@
+{
+  "pages": [
+    { "path": "pages/explore/index", "style": { "navigationBarTitleText": "探索" } },
+    { "path": "pages/mine/index", "style": { "navigationBarTitleText": "我的" } },
+    { "path": "pages/confirm/index", "style": { "navigationBarTitleText": "确认概念" } },
+    { "path": "pages/waiting/index", "style": { "navigationBarTitleText": "撰写中" } },
+    { "path": "pages/story/index", "style": { "navigationBarTitleText": "阅读" } }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "寓境",
+    "navigationBarBackgroundColor": "#f7f8fa",
+    "backgroundColor": "#f7f8fa"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4f46e5",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/explore/index",
+        "text": "探索",
+        "iconPath": "static/tab-explore.png",
+        "selectedIconPath": "static/tab-explore-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/tab-mine.png",
+        "selectedIconPath": "static/tab-mine-active.png"
+      }
+    ]
+  }
+}

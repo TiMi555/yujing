@@ -1,0 +1,26 @@
+[
+  {
+    "concept_key": "prisoners_dilemma",
+    "canonical_name": "囚徒困境",
+    "category": "经济学",
+    "aliases": ["囚徒困境", "囚徒博弈", "prisoner's dilemma"]
+  },
+  {
+    "concept_key": "diminishing_marginal_returns",
+    "canonical_name": "边际报酬递减规律",
+    "category": "经济学",
+    "aliases": ["边际报酬递减", "边际效用递减", "law of diminishing returns"]
+  },
+  {
+    "concept_key": "matthew_effect",
+    "canonical_name": "马太效应",
+    "category": "社会学",
+    "aliases": ["马太效应", "Matthew effect"]
+  },
+  {
+    "concept_key": "vanishing_gradient",
+    "canonical_name": "梯度消失",
+    "category": "计算机科学",
+    "aliases": ["梯度消失", "vanishing gradient", "gradient vanishing"]
+  }
+]

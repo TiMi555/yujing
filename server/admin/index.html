@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>寓境 Admin</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; background: #f5f5f5; }
+    h1 { margin-bottom: 8px; }
+    .bar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+    input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 6px; min-width: 280px; }
+    button { padding: 8px 14px; border: none; border-radius: 6px; background: #1677ff; color: #fff; cursor: pointer; }
+    button.danger { background: #ff4d4f; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+    th { background: #fafafa; }
+    .tabs { margin: 16px 0; }
+    .tab { margin-right: 8px; padding: 6px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
+    .tab.active { background: #1677ff; color: #fff; border-color: #1677ff; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>寓境 Admin</h1>
+  <div class="bar">
+    <input id="apiKey" placeholder="Admin API Key" />
+    <button onclick="saveKey()">保存 Key</button>
+    <button onclick="loadStories()">刷新故事</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('stories')">故事列表</button>
+    <button class="tab" onclick="switchTab('failures')">失败日志</button>
+  </div>
+  <div id="storiesPanel">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>概念 Key</th><th>标题</th><th>概念名</th><th>解锁数</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="storyBody"></tbody>
+    </table>
+  </div>
+  <div id="failuresPanel" class="hidden">
+    <table>
+      <thead>
+        <tr><th>时间</th><th>Key</th><th>输入</th><th>错误</th></tr>
+      </thead>
+      <tbody id="failureBody"></tbody>
+    </table>
+  </div>
+  <script>
+    const keyInput = document.getElementById('apiKey');
+    keyInput.value = localStorage.getItem('yujing_admin_key') || '';
+    function saveKey() { localStorage.setItem('yujing_admin_key', keyInput.value); alert('已保存'); }
+    function headers() { return { 'X-Admin-Key': keyInput.value || localStorage.getItem('yujing_admin_key') }; }
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('storiesPanel').classList.toggle('hidden', name !== 'stories');
+      document.getElementById('failuresPanel').classList.toggle('hidden', name !== 'failures');
+      if (name === 'failures') loadFailures();
+    }
+    async function loadStories() {
+      const res = await fetch('/admin/stories', { headers: headers() });
+      const data = await res.json();
+      document.getElementById('storyBody').innerHTML = (data.items || []).map(s => `
+        <tr>
+          <td>${s.id}</td><td>${s.concept_key}</td><td>${s.title}</td><td>${s.concept_name}</td><td>${s.unlock_count}</td>
+          <td><button class="danger" onclick="regenerate('${s.concept_key}')">重生</button></td>
+        </tr>`).join('');
+    }
+    async function loadFailures() {
+      const res = await fetch('/admin/failures', { headers: headers() });
+      const data = await res.json();
+      document.getElementById('failureBody').innerHTML = (data.items || []).map(f => `
+        <tr><td>${new Date(f.created_at).toLocaleString()}</td><td>${f.concept_key||''}</td><td>${f.raw_input||''}</td><td>${f.error_message}</td></tr>`).join('');
+    }
+    async function regenerate(key) {
+      if (!confirm('确认重新生成 ' + key + ' ?')) return;
+      const res = await fetch('/admin/stories/' + key + '/regenerate', { method: 'POST', headers: headers() });
+      const data = await res.json();
+      alert(res.ok ? '重生成功: ' + data.story.title : data.message);
+      loadStories();
+    }
+    loadStories();
+  </script>
+</body>
+</html>

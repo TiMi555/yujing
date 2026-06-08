@@ -1,0 +1,14 @@
+{
+  "name": "寓境",
+  "appid": "__UNI__YUJING",
+  "description": "寓言式学习小程序",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    }
+  }
+}
