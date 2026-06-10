@@ -147,8 +147,9 @@ nano .env   # 或 vi .env
 POSTGRES_PASSWORD=强密码随机字符串
 NODE_ENV=production
 
-VOLCENGINE_API_KEY=方舟控制台里的Key
-VOLCENGINE_MODEL=ep-xxxxxxxx   # 推理接入点 ID
+OPENAI_API_KEY=你的秘钥
+OPENAI_MODEL=gpt-4.1-mini
+OPENAI_BASE_URL=https://api.freemodel.dev
 
 WECHAT_APPID=wx................
 WECHAT_SECRET=................
@@ -271,7 +272,7 @@ curl https://api.你的域名.com/health
 3. 本地修改 `miniapp/src/config.js`：
 
 ```js
-export const BASE_URL = 'https://api.你的域名.com';
+export const BASE_URL = 'https://api.yourdomain.com';
 ```
 
 4. 本地构建并上传：

@@ -1,69 +1,78 @@
-# 寓境 MVP
+# 寓言 MVP
 
-寓言式学习微信小程序 — Uni-app + Koa2 + PostgreSQL + 火山方舟
+寓言式学习微信小程序，包含后端服务、两套前端工程和部署文档。
+
+## 当前约定
+
+- **默认主线**：`miniapp/`
+- **候选主线**：`miniAPP-V2/`
+- **后端服务**：`server/`
+- **部署相关**：`deploy/`
+- **说明文档**：`docs/`
+
+`miniapp/` 和 `miniAPP-V2/` 可以并存，但它们是两套独立工程，不能混用源码目录、构建产物和开发者工具导入目录。
 
 ## 目录结构
 
-```
-yujing/
-├── server/          # Koa2 API
-├── miniapp/         # Uni-app 微信小程序
+```text
+projects/yujing/
+├── server/                # Koa2 API
+├── miniapp/               # 当前默认前端主线（Uni-app）
+├── miniAPP-V2/            # 候选主线前端（独立小程序工程）
+├── deploy/                # ECS / Nginx / 部署脚本
+├── docs/                  # 规范、验收、联调说明
 ├── docker-compose.yml
-└── .env.example
+├── .env.example
+├── .gitignore
+├── README.md
+└── HANDOFF.md
 ```
+
+## 开发约定
+
+### `server/`
+后端只负责 API、数据库迁移、种子数据和认证逻辑。
+
+### `miniapp/`
+当前联调和微信开发者工具导入默认使用这个目录。
+
+- `src/` 是源码
+- `dist/build/mp-weixin/` 是构建产物
+- `devtools-ready/` 是给微信开发者工具导入的同步目录
+
+### `miniAPP-V2/`
+这是另一套独立小程序工程，后续会作为主线候选继续演进。
+
+- 目录内部自成一体
+- 不借用 `miniapp/` 的构建产物
+- 不和 `miniapp/` 混写同一套运行时目录
 
 ## 本地开发
 
-### 1. 环境变量
+### 后端
 
 ```bash
-cp .env.example .env
-# 编辑 VOLCENGINE_API_KEY 等
-```
-
-### 2. 启动数据库
-
-```bash
-docker compose up -d postgres
-```
-
-### 3. 后端
-
-```bash
-cd server
+cd projects/yujing/server
 npm install
 npm run migrate
 npm run dev
-# http://localhost:3000/health
 ```
 
-### 4. 小程序
+### 当前前端主线
 
 ```bash
-cd miniapp
+cd projects/yujing/miniapp
 npm install
-npm run dev:mp-weixin
+npm run build:mp-weixin
 ```
 
-微信开发者工具打开 `miniapp/dist/dev/mp-weixin`，勾选「不校验合法域名」。  
-修改 `miniapp/src/config.js` 中的 `BASE_URL` 为本机 IP（真机调试时）。
+构建后把 `dist/build/mp-weixin/` 同步到 `devtools-ready/`，然后在微信开发者工具里导入 `devtools-ready/`。
 
-### 5. 内测灌库（需配置 LLM）
+### 候选前端主线
 
-```bash
-cd server
-npm run seed
-```
+直接用微信开发者工具导入 `projects/yujing/miniAPP-V2/`，按它自己的工程结构开发和编译。
 
-### 6. Admin
+## 相关文档
 
-浏览器打开 `http://localhost:3000/admin`，输入 `.env` 中 `ADMIN_API_KEY`。
-
-## ECS 部署（2C2G）
-
-见 [deploy/DEPLOY.md](./deploy/DEPLOY.md)
-
-## 需求文档
-
-- [03-需求文档/寓境/需求文档.md](../../03-需求文档/寓境/需求文档.md)
-- [Codex开发任务.md](../../03-需求文档/寓境/Codex开发任务.md)
+- [目录规范](./docs/DIRECTORY.md)
+- [验收清单](./docs/ACCEPTANCE.md)
